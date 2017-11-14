@@ -1,4 +1,4 @@
-/* Specific flags and argument handling of the Tiny front-end.
+/* Specific flags and argument handling of the Tiger front-end.
    Copyright (C) 2016 Free Software Foundation, Inc.
 
 GNU CC is free software; you can redistribute it and/or modify
@@ -26,9 +26,9 @@ lang_specific_driver (struct cl_decoded_option ** /* in_decoded_options */,
 int
 lang_specific_pre_link (void)
 {
-  /* Not used for Tiny.  */
+  /* Not used for Tiger.  */
   return 0;
 }
 
 /* Number of extra output files that lang_specific_pre_link may generate.  */
-int lang_specific_extra_outfiles = 0; /* Not used for Tiny.  */
+int lang_specific_extra_outfiles = 0; /* Not used for Tiger.  */

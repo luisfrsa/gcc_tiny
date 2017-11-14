@@ -1,12 +1,12 @@
 #include <utility>
 #include <sstream>
 
-#include "tiny-symbol-mapping.h"
+#include "tiger-symbol-mapping.h"
 
 #include "config.h"
 #include "system.h"
 
-namespace Tiny
+namespace Tiger
 {
 
 void

@@ -1,9 +1,9 @@
-Grammar for Tiny Imperative Language (TIL)
+Grammar for Tiger Imperative Language (TIL)
 ==========================================
 
 Based on the grammar in
 
-   http://www.program-transformation.org/Sts/TinyImperativeLanguage
+   http://www.program-transformation.org/Sts/TigerImperativeLanguage
 
 
 Grammar

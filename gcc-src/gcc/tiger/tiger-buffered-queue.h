@@ -1,12 +1,12 @@
-#ifndef TINY_BUFFERED_QUEUE_H
-#define TINY_BUFFERED_QUEUE_H
+#ifndef TIGER_BUFFERED_QUEUE_H
+#define TIGER_BUFFERED_QUEUE_H
 
 #include <vector>
 
 #include "config.h"
 #include "system.h"
 
-namespace Tiny
+namespace Tiger
 {
 
 template <typename T, typename Source> struct buffered_queue
@@ -92,4 +92,4 @@ private:
 };
 }
 
-#endif // TINY_BUFFERED_QUEUE_H
+#endif // TIGER_BUFFERED_QUEUE_H

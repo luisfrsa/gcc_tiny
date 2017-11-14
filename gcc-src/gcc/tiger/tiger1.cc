@@ -1,4 +1,4 @@
-/* Tiny compiler
+/* Tiger compiler
    Copyright (C) 2016 Free Software Foundation, Inc.
 
 GNU CC is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@ along with GCC; see the file COPYING3.  If not see
 #include "langhooks.h"
 #include "langhooks-def.h"
 #include "common/common-target.h"
-#include "tiny/tiny-parser.h"
+#include "tiger/tiger-parser.h"
 
 /* Language-dependent contents of a type.  */
 
@@ -76,7 +76,7 @@ struct GTY (()) language_function
 /* Language hooks.  */
 
 static bool
-tiny_langhook_init (void)
+tiger_langhook_init (void)
 {
   build_common_tree_nodes (false);
 
@@ -89,13 +89,13 @@ tiny_langhook_init (void)
 }
 
 static void
-tiny_langhook_parse_file (void)
+tiger_langhook_parse_file (void)
 {
-  tiny_parse_files (num_in_fnames, in_fnames);
+  tiger_parse_files (num_in_fnames, in_fnames);
 }
 
 static tree
-tiny_langhook_type_for_mode (enum machine_mode mode, int unsignedp)
+tiger_langhook_type_for_mode (enum machine_mode mode, int unsignedp)
 {
   if (mode == TYPE_MODE (float_type_node))
     return float_type_node;
@@ -141,7 +141,7 @@ tiny_langhook_type_for_mode (enum machine_mode mode, int unsignedp)
 }
 
 static tree
-tiny_langhook_type_for_size (unsigned int bits ATTRIBUTE_UNUSED,
+tiger_langhook_type_for_size (unsigned int bits ATTRIBUTE_UNUSED,
 			     int unsignedp ATTRIBUTE_UNUSED)
 {
   gcc_unreachable ();
@@ -151,57 +151,57 @@ tiny_langhook_type_for_size (unsigned int bits ATTRIBUTE_UNUSED,
 /* Record a builtin function.  We just ignore builtin functions.  */
 
 static tree
-tiny_langhook_builtin_function (tree decl)
+tiger_langhook_builtin_function (tree decl)
 {
   return decl;
 }
 
 static bool
-tiny_langhook_global_bindings_p (void)
+tiger_langhook_global_bindings_p (void)
 {
   return false;
 }
 
 static tree
-tiny_langhook_pushdecl (tree decl ATTRIBUTE_UNUSED)
+tiger_langhook_pushdecl (tree decl ATTRIBUTE_UNUSED)
 {
   gcc_unreachable ();
 }
 
 static tree
-tiny_langhook_getdecls (void)
+tiger_langhook_getdecls (void)
 {
   return NULL;
 }
 
 #undef LANG_HOOKS_NAME
-#define LANG_HOOKS_NAME "Tiny"
+#define LANG_HOOKS_NAME "Tiger"
 
 #undef LANG_HOOKS_INIT
-#define LANG_HOOKS_INIT tiny_langhook_init
+#define LANG_HOOKS_INIT tiger_langhook_init
 
 #undef LANG_HOOKS_PARSE_FILE
-#define LANG_HOOKS_PARSE_FILE tiny_langhook_parse_file
+#define LANG_HOOKS_PARSE_FILE tiger_langhook_parse_file
 
 #undef LANG_HOOKS_TYPE_FOR_MODE
-#define LANG_HOOKS_TYPE_FOR_MODE tiny_langhook_type_for_mode
+#define LANG_HOOKS_TYPE_FOR_MODE tiger_langhook_type_for_mode
 
 #undef LANG_HOOKS_TYPE_FOR_SIZE
-#define LANG_HOOKS_TYPE_FOR_SIZE tiny_langhook_type_for_size
+#define LANG_HOOKS_TYPE_FOR_SIZE tiger_langhook_type_for_size
 
 #undef LANG_HOOKS_BUILTIN_FUNCTION
-#define LANG_HOOKS_BUILTIN_FUNCTION tiny_langhook_builtin_function
+#define LANG_HOOKS_BUILTIN_FUNCTION tiger_langhook_builtin_function
 
 #undef LANG_HOOKS_GLOBAL_BINDINGS_P
-#define LANG_HOOKS_GLOBAL_BINDINGS_P tiny_langhook_global_bindings_p
+#define LANG_HOOKS_GLOBAL_BINDINGS_P tiger_langhook_global_bindings_p
 
 #undef LANG_HOOKS_PUSHDECL
-#define LANG_HOOKS_PUSHDECL tiny_langhook_pushdecl
+#define LANG_HOOKS_PUSHDECL tiger_langhook_pushdecl
 
 #undef LANG_HOOKS_GETDECLS
-#define LANG_HOOKS_GETDECLS tiny_langhook_getdecls
+#define LANG_HOOKS_GETDECLS tiger_langhook_getdecls
 
 struct lang_hooks lang_hooks = LANG_HOOKS_INITIALIZER;
 
-#include "gt-tiny-tiny1.h"
-#include "gtype-tiny.h"
+#include "gt-tiger-tiger1.h"
+#include "gtype-tiger.h"

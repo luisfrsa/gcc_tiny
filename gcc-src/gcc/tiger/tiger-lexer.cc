@@ -1,4 +1,4 @@
-#include "tiny/tiny-lexer.h"
+#include "tiger/tiger-lexer.h"
 
 #include "config.h"
 #include "coretypes.h"
@@ -9,7 +9,7 @@
 #include <cstdlib>
 #include <algorithm>
 
-namespace Tiny
+namespace Tiger
 {
 
 Lexer::Lexer (const char *filename, FILE *input_)
@@ -64,19 +64,19 @@ namespace
 {
 
 const std::string keyword_index[] = {
-#define TINY_TOKEN(x, y)
-#define TINY_TOKEN_KEYWORD(name, keyword) keyword,
-  TINY_TOKEN_LIST
-#undef TINY_TOKEN_KEYWORD
-#undef TINY_TOKEN
+#define TIGER_TOKEN(x, y)
+#define TIGER_TOKEN_KEYWORD(name, keyword) keyword,
+  TIGER_TOKEN_LIST
+#undef TIGER_TOKEN_KEYWORD
+#undef TIGER_TOKEN
 };
 
 TokenId keyword_keys[] = {
-#define TINY_TOKEN(x, y)
-#define TINY_TOKEN_KEYWORD(name, keyword) name,
-  TINY_TOKEN_LIST
-#undef TINY_TOKEN_KEYWORD
-#undef TINY_TOKEN
+#define TIGER_TOKEN(x, y)
+#define TIGER_TOKEN_KEYWORD(name, keyword) name,
+  TIGER_TOKEN_LIST
+#undef TIGER_TOKEN_KEYWORD
+#undef TIGER_TOKEN
 };
 
 const int num_keywords = sizeof (keyword_index) / sizeof (*keyword_index);

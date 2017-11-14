@@ -1,15 +1,15 @@
-#ifndef TINY_LEXER_H
-#define TINY_LEXER_H
+#ifndef TIGER_LEXER_H
+#define TIGER_LEXER_H
 
 #include "config.h"
 #include "system.h"
 #include "coretypes.h"
 #include "input.h"
 
-#include "tiny-token.h"
-#include "tiny-buffered-queue.h"
+#include "tiger-token.h"
+#include "tiger-buffered-queue.h"
 
-namespace Tiny
+namespace Tiger
 {
 
 struct Lexer
@@ -67,4 +67,4 @@ private:
 };
 }
 
-#endif // TINY_LEXER_H
+#endif // TIGER_LEXER_H

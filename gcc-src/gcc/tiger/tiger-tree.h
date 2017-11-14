@@ -1,5 +1,5 @@
-#ifndef TINY_TREE_H
-#define TINY_TREE_H
+#ifndef TIGER_TREE_H
+#define TIGER_TREE_H
 
 #include "config.h"
 #include "system.h"
@@ -8,7 +8,7 @@
 #include "tree-iterator.h"
 #include "input.h"
 
-namespace Tiny
+namespace Tiger
 {
 
 // This wrapper is similar to cp_tree used in C++ FE
@@ -187,4 +187,4 @@ struct BlockChain : TreeChainBase<block_chain_append>
 
 }
 
-#endif // TINY_TREE_H
+#endif // TIGER_TREE_H

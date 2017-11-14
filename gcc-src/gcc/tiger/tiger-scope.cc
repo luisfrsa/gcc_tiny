@@ -1,6 +1,6 @@
-#include "tiny-scope.h"
+#include "tiger-scope.h"
 
-namespace Tiny
+namespace Tiger
 {
 
 Scope::Scope ()

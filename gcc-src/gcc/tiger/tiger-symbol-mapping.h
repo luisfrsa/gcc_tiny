@@ -1,11 +1,11 @@
-#ifndef TINY_SYMBOL_MAPPING_H
-#define TINY_SYMBOL_MAPPING_H
+#ifndef TIGER_SYMBOL_MAPPING_H
+#define TIGER_SYMBOL_MAPPING_H
 
-#include "tiny/tiny-symbol.h"
+#include "tiger/tiger-symbol.h"
 #include <tr1/memory>
 #include <map>
 
-namespace Tiny
+namespace Tiger
 {
 
 struct SymbolMapping
@@ -23,4 +23,4 @@ private:
 
 }
 
-#endif // TINY_SYMBOL_MAPPING_H
+#endif // TIGER_SYMBOL_MAPPING_H

@@ -1,5 +1,5 @@
-#ifndef TINY_TOKEN_H
-#define TINY_TOKEN_H
+#ifndef TIGER_TOKEN_H
+#define TIGER_TOKEN_H
 
 #include "config.h"
 #include "system.h"
@@ -9,73 +9,73 @@
 #include <string>
 #include <tr1/memory>
 
-namespace Tiny
+namespace Tiger
 {
 
-// TINY_TOKEN(name, description)
-// TINY_TOKEN_KEYWORD(name, identifier)
+// TIGER_TOKEN(name, description)
+// TIGER_TOKEN_KEYWORD(name, identifier)
 //
-// Keep TINY_TOKEN_KEYWORD sorted
+// Keep TIGER_TOKEN_KEYWORD sorted
 
-#define TINY_TOKEN_LIST                                                        \
-  TINY_TOKEN (FIRST_TOKEN, "<first-token-marker>")                             \
-  TINY_TOKEN (END_OF_FILE, "end of file")                                      \
-  TINY_TOKEN (ASSIG, ":=")                                                     \
-  TINY_TOKEN (ASTERISK, "*")                                                   \
-  TINY_TOKEN (COLON, ":")                                                      \
-  TINY_TOKEN (COMMA, ",")                                                      \
-  TINY_TOKEN (DIFFERENT, "!=")                                                 \
-  TINY_TOKEN (EQUAL, "=")                                                      \
-  TINY_TOKEN (LEFT_PAREN, "(")                                                 \
-  TINY_TOKEN (MINUS, "-")                                                      \
-  TINY_TOKEN (PLUS, "+")                                                       \
-  TINY_TOKEN (RIGHT_PAREN, ")")                                                \
-  TINY_TOKEN (SEMICOLON, ";")                                                  \
-  TINY_TOKEN (SLASH, "/")                                                      \
-  TINY_TOKEN (PERCENT, "%")                                                    \
-  TINY_TOKEN (GREATER, ">")                                                    \
-  TINY_TOKEN (GREATER_OR_EQUAL, ">=")                                          \
-  TINY_TOKEN (LOWER, "<")                                                      \
-  TINY_TOKEN (LOWER_OR_EQUAL, "<=")                                            \
-  TINY_TOKEN (IDENTIFIER, "identifier")                                        \
-  TINY_TOKEN (INTEGER_LITERAL, "integer literal")                              \
-  TINY_TOKEN (REAL_LITERAL, "real literal")                                    \
-  TINY_TOKEN (STRING_LITERAL, "string literal")                                \
-  TINY_TOKEN (LEFT_SQUARE, "[")                                                \
-  TINY_TOKEN (RIGHT_SQUARE, "]")                                               \
-  TINY_TOKEN (DOT, ".")                                                        \
+#define TIGER_TOKEN_LIST                                                        \
+  TIGER_TOKEN (FIRST_TOKEN, "<first-token-marker>")                             \
+  TIGER_TOKEN (END_OF_FILE, "end of file")                                      \
+  TIGER_TOKEN (ASSIG, ":=")                                                     \
+  TIGER_TOKEN (ASTERISK, "*")                                                   \
+  TIGER_TOKEN (COLON, ":")                                                      \
+  TIGER_TOKEN (COMMA, ",")                                                      \
+  TIGER_TOKEN (DIFFERENT, "!=")                                                 \
+  TIGER_TOKEN (EQUAL, "=")                                                      \
+  TIGER_TOKEN (LEFT_PAREN, "(")                                                 \
+  TIGER_TOKEN (MINUS, "-")                                                      \
+  TIGER_TOKEN (PLUS, "+")                                                       \
+  TIGER_TOKEN (RIGHT_PAREN, ")")                                                \
+  TIGER_TOKEN (SEMICOLON, ";")                                                  \
+  TIGER_TOKEN (SLASH, "/")                                                      \
+  TIGER_TOKEN (PERCENT, "%")                                                    \
+  TIGER_TOKEN (GREATER, ">")                                                    \
+  TIGER_TOKEN (GREATER_OR_EQUAL, ">=")                                          \
+  TIGER_TOKEN (LOWER, "<")                                                      \
+  TIGER_TOKEN (LOWER_OR_EQUAL, "<=")                                            \
+  TIGER_TOKEN (IDENTIFIER, "identifier")                                        \
+  TIGER_TOKEN (INTEGER_LITERAL, "integer literal")                              \
+  TIGER_TOKEN (REAL_LITERAL, "real literal")                                    \
+  TIGER_TOKEN (STRING_LITERAL, "string literal")                                \
+  TIGER_TOKEN (LEFT_SQUARE, "[")                                                \
+  TIGER_TOKEN (RIGHT_SQUARE, "]")                                               \
+  TIGER_TOKEN (DOT, ".")                                                        \
                                                                                \
-  TINY_TOKEN_KEYWORD (AND, "and")                                              \
-  TINY_TOKEN_KEYWORD (BOOL, "bool")                                            \
-  TINY_TOKEN_KEYWORD (DO, "do")                                                \
-  TINY_TOKEN_KEYWORD (ELSE, "else")                                            \
-  TINY_TOKEN_KEYWORD (END, "end")                                              \
-  TINY_TOKEN_KEYWORD (FALSE_LITERAL, "false")                                  \
-  TINY_TOKEN_KEYWORD (FLOAT, "float")                                          \
-  TINY_TOKEN_KEYWORD (FOR, "for")                                              \
-  TINY_TOKEN_KEYWORD (IF, "if")                                                \
-  TINY_TOKEN_KEYWORD (INT, "int")                                              \
-  TINY_TOKEN_KEYWORD (NOT, "not")                                              \
-  TINY_TOKEN_KEYWORD (OR, "or")                                                \
-  TINY_TOKEN_KEYWORD (READ, "read")                                            \
-  TINY_TOKEN_KEYWORD (RECORD, "record")                                        \
-  TINY_TOKEN_KEYWORD (THEN, "then")                                            \
-  TINY_TOKEN_KEYWORD (TO, "to")                                                \
-  TINY_TOKEN_KEYWORD (TRUE_LITERAL, "true")                                    \
-  TINY_TOKEN_KEYWORD (TYPE, "type")                                            \
-  TINY_TOKEN_KEYWORD (VAR, "var")                                              \
-  TINY_TOKEN_KEYWORD (WHILE, "while")                                          \
-  TINY_TOKEN_KEYWORD (WRITE, "write")                                          \
+  TIGER_TOKEN_KEYWORD (AND, "and")                                              \
+  TIGER_TOKEN_KEYWORD (BOOL, "bool")                                            \
+  TIGER_TOKEN_KEYWORD (DO, "do")                                                \
+  TIGER_TOKEN_KEYWORD (ELSE, "else")                                            \
+  TIGER_TOKEN_KEYWORD (END, "end")                                              \
+  TIGER_TOKEN_KEYWORD (FALSE_LITERAL, "false")                                  \
+  TIGER_TOKEN_KEYWORD (FLOAT, "float")                                          \
+  TIGER_TOKEN_KEYWORD (FOR, "for")                                              \
+  TIGER_TOKEN_KEYWORD (IF, "if")                                                \
+  TIGER_TOKEN_KEYWORD (INT, "int")                                              \
+  TIGER_TOKEN_KEYWORD (NOT, "not")                                              \
+  TIGER_TOKEN_KEYWORD (OR, "or")                                                \
+  TIGER_TOKEN_KEYWORD (READ, "read")                                            \
+  TIGER_TOKEN_KEYWORD (RECORD, "record")                                        \
+  TIGER_TOKEN_KEYWORD (THEN, "then")                                            \
+  TIGER_TOKEN_KEYWORD (TO, "to")                                                \
+  TIGER_TOKEN_KEYWORD (TRUE_LITERAL, "true")                                    \
+  TIGER_TOKEN_KEYWORD (TYPE, "type")                                            \
+  TIGER_TOKEN_KEYWORD (VAR, "var")                                              \
+  TIGER_TOKEN_KEYWORD (WHILE, "while")                                          \
+  TIGER_TOKEN_KEYWORD (WRITE, "write")                                          \
                                                                                \
-  TINY_TOKEN (LAST_TOKEN, "<last-token-marker>")
+  TIGER_TOKEN (LAST_TOKEN, "<last-token-marker>")
 
 enum /* class */ TokenId
 {
-#define TINY_TOKEN(name, _) name,
-#define TINY_TOKEN_KEYWORD(x, y) TINY_TOKEN (x, y)
-  TINY_TOKEN_LIST
-#undef TINY_TOKEN_KEYWORD
-#undef TINY_TOKEN
+#define TIGER_TOKEN(name, _) name,
+#define TIGER_TOKEN_KEYWORD(x, y) TIGER_TOKEN (x, y)
+  TIGER_TOKEN_LIST
+#undef TIGER_TOKEN_KEYWORD
+#undef TIGER_TOKEN
 };
 
 const char *get_token_description (TokenId tid);
@@ -163,17 +163,17 @@ public:
   const char *
   get_token_description () const
   {
-    return Tiny::get_token_description (token_id);
+    return Tiger::get_token_description (token_id);
   }
 
   // debugging
   const char *
   token_id_to_str () const
   {
-    return Tiny::token_id_to_str (token_id);
+    return Tiger::token_id_to_str (token_id);
   }
 };
 
 }
 
-#endif // TINY_TOKEN_H
+#endif // TIGER_TOKEN_H

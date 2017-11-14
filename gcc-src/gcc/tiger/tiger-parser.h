@@ -1,4 +1,4 @@
-/* Tiny parsing interfaces
+/* Tiger parsing interfaces
    Copyright (C) 2016 Free Software Foundation, Inc.
 
 GNU CC is free software; you can redistribute it and/or modify
@@ -15,9 +15,9 @@ You should have received a copy of the GNU General Public License
 along with GCC; see the file COPYING3.  If not see
 <http://www.gnu.org/licenses/>.  */
 
-#ifndef TINY_PARSE_H
-#define TINY_PARSE_H
+#ifndef TIGER_PARSE_H
+#define TIGER_PARSE_H
 
-extern void tiny_parse_files (int num_files, const char **files);
+extern void tiger_parse_files (int num_files, const char **files);
 
-#endif // TINY_PARSE_H
+#endif // TIGER_PARSE_H

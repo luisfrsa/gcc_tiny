@@ -1,4 +1,4 @@
-/* Tiny parser
+/* Tiger parser
    Copyright (C) 2016 Free Software Foundation, Inc.
 
 GNU CC is free software; you can redistribute it and/or modify
@@ -18,12 +18,12 @@ along with GCC; see the file COPYING3.  If not see
 #include <iostream>
 #include <memory>
 
-#include "tiny/tiny-parser.h"
-#include "tiny/tiny-lexer.h"
-#include "tiny/tiny-tree.h"
-#include "tiny/tiny-symbol.h"
-#include "tiny/tiny-symbol-mapping.h"
-#include "tiny/tiny-scope.h"
+#include "tiger/tiger-parser.h"
+#include "tiger/tiger-lexer.h"
+#include "tiger/tiger-tree.h"
+#include "tiger/tiger-symbol.h"
+#include "tiger/tiger-symbol-mapping.h"
+#include "tiger/tiger-scope.h"
 
 #include "config.h"
 #include "system.h"
@@ -42,7 +42,7 @@ along with GCC; see the file COPYING3.  If not see
 #include "stor-layout.h"
 #include "fold-const.h"
 
-namespace Tiny
+namespace Tiger
 {
 
 struct Parser
@@ -179,13 +179,13 @@ Parser::skip_after_semicolon ()
 {
   const_TokenPtr t = lexer.peek_token ();
 
-  while (t->get_id () != Tiny::END_OF_FILE && t->get_id () != Tiny::SEMICOLON)
+  while (t->get_id () != Tiger::END_OF_FILE && t->get_id () != Tiger::SEMICOLON)
     {
       lexer.skip_token ();
       t = lexer.peek_token ();
     }
 
-  if (t->get_id () == Tiny::SEMICOLON)
+  if (t->get_id () == Tiger::SEMICOLON)
     lexer.skip_token ();
 }
 
@@ -194,18 +194,18 @@ Parser::skip_after_end ()
 {
   const_TokenPtr t = lexer.peek_token ();
 
-  while (t->get_id () != Tiny::END_OF_FILE && t->get_id () != Tiny::END)
+  while (t->get_id () != Tiger::END_OF_FILE && t->get_id () != Tiger::END)
     {
       lexer.skip_token ();
       t = lexer.peek_token ();
     }
 
-  if (t->get_id () == Tiny::END)
+  if (t->get_id () == Tiger::END)
     lexer.skip_token ();
 }
 
 const_TokenPtr
-Parser::expect_token (Tiny::TokenId token_id)
+Parser::expect_token (Tiger::TokenId token_id)
 {
   const_TokenPtr t = lexer.peek_token ();
   if (t->get_id () == token_id)
@@ -222,7 +222,7 @@ Parser::expect_token (Tiny::TokenId token_id)
 }
 
 bool
-Parser::skip_token (Tiny::TokenId token_id)
+Parser::skip_token (Tiger::TokenId token_id)
 {
   return expect_token (token_id) != const_TokenPtr();
 }
@@ -287,22 +287,22 @@ bool
 Parser::done_end_of_file ()
 {
   const_TokenPtr t = lexer.peek_token ();
-  return (t->get_id () == Tiny::END_OF_FILE);
+  return (t->get_id () == Tiger::END_OF_FILE);
 }
 
 bool
 Parser::done_end ()
 {
   const_TokenPtr t = lexer.peek_token ();
-  return (t->get_id () == Tiny::END || t->get_id () == Tiny::END_OF_FILE);
+  return (t->get_id () == Tiger::END || t->get_id () == Tiger::END_OF_FILE);
 }
 
 bool
 Parser::done_end_or_else ()
 {
   const_TokenPtr t = lexer.peek_token ();
-  return (t->get_id () == Tiny::END || t->get_id () == Tiny::ELSE
-	  || t->get_id () == Tiny::END_OF_FILE);
+  return (t->get_id () == Tiger::END || t->get_id () == Tiger::ELSE
+	  || t->get_id () == Tiger::END_OF_FILE);
 }
 
 void
@@ -391,28 +391,28 @@ Parser::parse_statement ()
 
   switch (t->get_id ())
     {
-    case Tiny::VAR:
+    case Tiger::VAR:
       return parse_variable_declaration ();
       break;
-    case Tiny::TYPE:
+    case Tiger::TYPE:
       return parse_type_declaration ();
       break;
-    case Tiny::IF:
+    case Tiger::IF:
       return parse_if_statement ();
       break;
-    case Tiny::WHILE:
+    case Tiger::WHILE:
       return parse_while_statement ();
       break;
-    case Tiny::FOR:
+    case Tiger::FOR:
       return parse_for_statement ();
       break;
-    case Tiny::READ:
+    case Tiger::READ:
       return parse_read_statement ();
       break;
-    case Tiny::WRITE:
+    case Tiger::WRITE:
       return parse_write_statement ();
       break;
-    case Tiny::IDENTIFIER:
+    case Tiger::IDENTIFIER:
       return parse_assignment_statement ();
       break;
     default:
@@ -429,20 +429,20 @@ Tree
 Parser::parse_variable_declaration ()
 {
   // variable_declaration -> "var" identifier ":" type ";"
-  if (!skip_token (Tiny::VAR))
+  if (!skip_token (Tiger::VAR))
     {
       skip_after_semicolon ();
       return Tree::error ();
     }
 
-  const_TokenPtr identifier = expect_token (Tiny::IDENTIFIER);
+  const_TokenPtr identifier = expect_token (Tiger::IDENTIFIER);
   if (identifier == NULL)
     {
       skip_after_semicolon ();
       return Tree::error ();
     }
 
-  if (!skip_token (Tiny::COLON))
+  if (!skip_token (Tiger::COLON))
     {
       skip_after_semicolon ();
       return Tree::error ();
@@ -456,7 +456,7 @@ Parser::parse_variable_declaration ()
       return Tree::error ();
     }
 
-  skip_token (Tiny::SEMICOLON);
+  skip_token (Tiger::SEMICOLON);
 
   if (scope.get_current_mapping ().get (identifier->get_str ()))
     {
@@ -464,7 +464,7 @@ Parser::parse_variable_declaration ()
 		"name '%s' already declared in this scope",
 		identifier->get_str ().c_str ());
     }
-  SymbolPtr sym (new Symbol (Tiny::VARIABLE, identifier->get_str ()));
+  SymbolPtr sym (new Symbol (Tiger::VARIABLE, identifier->get_str ()));
   scope.get_current_mapping ().insert (sym);
 
   Tree decl = build_decl (identifier->get_locus (), VAR_DECL,
@@ -487,20 +487,20 @@ Tree
 Parser::parse_type_declaration ()
 {
   // type_declaration -> "type" identifier ":" type ";"
-  if (!skip_token (Tiny::TYPE))
+  if (!skip_token (Tiger::TYPE))
     {
       skip_after_semicolon ();
       return Tree::error ();
     }
 
-  const_TokenPtr identifier = expect_token (Tiny::IDENTIFIER);
+  const_TokenPtr identifier = expect_token (Tiger::IDENTIFIER);
   if (identifier == NULL)
     {
       skip_after_semicolon ();
       return Tree::error ();
     }
 
-  if (!skip_token (Tiny::COLON))
+  if (!skip_token (Tiger::COLON))
     {
       skip_after_semicolon ();
       return Tree::error ();
@@ -514,7 +514,7 @@ Parser::parse_type_declaration ()
       return Tree::error ();
     }
 
-  skip_token (Tiny::SEMICOLON);
+  skip_token (Tiger::SEMICOLON);
 
   if (scope.get_current_mapping ().get (identifier->get_str ()))
     {
@@ -522,7 +522,7 @@ Parser::parse_type_declaration ()
 		"name '%s' already declared in this scope",
 		identifier->get_str ().c_str ());
     }
-  SymbolPtr sym (new Symbol (Tiny::TYPENAME, identifier->get_str ()));
+  SymbolPtr sym (new Symbol (Tiger::TYPENAME, identifier->get_str ()));
   scope.get_current_mapping ().insert (sym);
 
   Tree decl = build_decl (identifier->get_locus (), TYPE_DECL,
@@ -607,18 +607,18 @@ Tree
 Parser::parse_field_declaration (std::vector<std::string> &field_names)
 {
   // identifier ':' type ';'
-  const_TokenPtr identifier = expect_token (Tiny::IDENTIFIER);
+  const_TokenPtr identifier = expect_token (Tiger::IDENTIFIER);
   if (identifier == NULL)
     {
       skip_after_semicolon ();
       return Tree::error ();
     }
 
-  skip_token (Tiny::COLON);
+  skip_token (Tiger::COLON);
 
   Tree type = parse_type();
 
-  skip_token (Tiny::SEMICOLON);
+  skip_token (Tiger::SEMICOLON);
 
   if (type.is_error ())
     return Tree::error ();
@@ -645,7 +645,7 @@ Tree
 Parser::parse_record ()
 {
   // "record" field-decl* "end"
-  const_TokenPtr record_tok = expect_token (Tiny::RECORD);
+  const_TokenPtr record_tok = expect_token (Tiger::RECORD);
   if (record_tok == NULL)
     {
       skip_after_semicolon ();
@@ -657,7 +657,7 @@ Parser::parse_record ()
   std::vector<std::string> field_names;
 
   const_TokenPtr next = lexer.peek_token ();
-  while (next->get_id () != Tiny::END)
+  while (next->get_id () != Tiger::END)
     {
       Tree field_decl = parse_field_declaration (field_names);
 
@@ -673,7 +673,7 @@ Parser::parse_record ()
       next = lexer.peek_token ();
     }
 
-  skip_token (Tiny::END);
+  skip_token (Tiger::END);
 
   TYPE_FIELDS (record_type.get_tree ()) = field_list.get_tree();
   layout_type (record_type.get_tree ());
@@ -698,19 +698,19 @@ Parser::parse_type ()
 
   switch (t->get_id ())
     {
-    case Tiny::INT:
+    case Tiger::INT:
       lexer.skip_token ();
       type = integer_type_node;
       break;
-    case Tiny::FLOAT:
+    case Tiger::FLOAT:
       lexer.skip_token ();
       type = float_type_node;
       break;
-    case Tiny::BOOL:
+    case Tiger::BOOL:
       lexer.skip_token ();
       type = boolean_type_node;
       break;
-    case Tiny::IDENTIFIER:
+    case Tiger::IDENTIFIER:
       {
 	SymbolPtr s = query_type (t->get_str (), t->get_locus ());
         lexer.skip_token ();
@@ -720,7 +720,7 @@ Parser::parse_type ()
           type = TREE_TYPE (s->get_tree_decl ().get_tree ());
       }
       break;
-    case Tiny::RECORD:
+    case Tiger::RECORD:
       type = parse_record ();
       break;
     default:
@@ -733,15 +733,15 @@ Parser::parse_type ()
   Dimensions dimensions;
 
   t = lexer.peek_token ();
-  while (t->get_id () == Tiny::LEFT_PAREN || t->get_id () == Tiny::LEFT_SQUARE)
+  while (t->get_id () == Tiger::LEFT_PAREN || t->get_id () == Tiger::LEFT_SQUARE)
     {
       lexer.skip_token ();
 
       Tree lower_bound, upper_bound;
-      if (t->get_id () == Tiny::LEFT_SQUARE)
+      if (t->get_id () == Tiger::LEFT_SQUARE)
 	{
 	  Tree size = parse_integer_expression ();
-	  skip_token (Tiny::RIGHT_SQUARE);
+	  skip_token (Tiger::RIGHT_SQUARE);
 
 	  lower_bound = Tree (build_int_cst_type (integer_type_node, 0),
 			      size.get_locus ());
@@ -750,13 +750,13 @@ Parser::parse_type ()
 			  size, build_int_cst (integer_type_node, 1));
 
 	}
-      else if (t->get_id () == Tiny::LEFT_PAREN)
+      else if (t->get_id () == Tiger::LEFT_PAREN)
 	{
 	  lower_bound = parse_integer_expression ();
-	  skip_token (Tiny::COLON);
+	  skip_token (Tiger::COLON);
 
 	  upper_bound = parse_integer_expression ();
-	  skip_token (Tiny::RIGHT_PAREN);
+	  skip_token (Tiger::RIGHT_PAREN);
 	}
       else
 	{
@@ -805,7 +805,7 @@ Parser::query_type (const std::string &name, location_t loc)
       error_at (loc, "type '%s' not declared in the current scope",
 		name.c_str ());
     }
-  else if (sym->get_kind () != Tiny::TYPENAME)
+  else if (sym->get_kind () != Tiger::TYPENAME)
     {
       error_at (loc, "name '%s' is not a type", name.c_str ());
       sym = SymbolPtr();
@@ -822,7 +822,7 @@ Parser::query_variable (const std::string &name, location_t loc)
       error_at (loc, "variable '%s' not declared in the current scope",
 		name.c_str ());
     }
-  else if (sym->get_kind () != Tiny::VARIABLE)
+  else if (sym->get_kind () != Tiger::VARIABLE)
     {
       error_at (loc, "name '%s' is not a variable", name.c_str ());
       sym = SymbolPtr();
@@ -859,7 +859,7 @@ Parser::parse_assignment_statement ()
   if (variable.is_error ())
     return Tree::error ();
 
-  const_TokenPtr assig_tok = expect_token (Tiny::ASSIG);
+  const_TokenPtr assig_tok = expect_token (Tiger::ASSIG);
   if (assig_tok == NULL)
     {
       skip_after_semicolon ();
@@ -872,7 +872,7 @@ Parser::parse_assignment_statement ()
   if (expr.is_error ())
     return Tree::error ();
 
-  skip_token (Tiny::SEMICOLON);
+  skip_token (Tiger::SEMICOLON);
 
   if (variable.get_type () != expr.get_type ())
     {
@@ -962,7 +962,7 @@ Parser::build_if_statement (Tree bool_expr, Tree then_part, Tree else_part)
 Tree
 Parser::parse_if_statement ()
 {
-  if (!skip_token (Tiny::IF))
+  if (!skip_token (Tiger::IF))
     {
       skip_after_end ();
       return Tree::error ();
@@ -970,7 +970,7 @@ Parser::parse_if_statement ()
 
   Tree expr = parse_boolean_expression ();
 
-  skip_token (Tiny::THEN);
+  skip_token (Tiger::THEN);
 
   enter_scope ();
   parse_statement_seq (&Parser::done_end_or_else);
@@ -980,10 +980,10 @@ Parser::parse_if_statement ()
 
   Tree else_stmt;
   const_TokenPtr tok = lexer.peek_token ();
-  if (tok->get_id () == Tiny::ELSE)
+  if (tok->get_id () == Tiger::ELSE)
     {
       // Consume 'else'
-      skip_token (Tiny::ELSE);
+      skip_token (Tiger::ELSE);
 
       enter_scope ();
       parse_statement_seq (&Parser::done_end);
@@ -991,12 +991,12 @@ Parser::parse_if_statement ()
       else_stmt = else_tree_scope.bind_expr;
 
       // Consume 'end'
-      skip_token (Tiny::END);
+      skip_token (Tiger::END);
     }
-  else if (tok->get_id () == Tiny::END)
+  else if (tok->get_id () == Tiger::END)
     {
       // Consume 'end'
-      skip_token (Tiny::END);
+      skip_token (Tiger::END);
     }
   else
     {
@@ -1061,14 +1061,14 @@ Parser::build_while_statement (Tree bool_expr, Tree while_body)
 Tree
 Parser::parse_while_statement ()
 {
-  if (!skip_token (Tiny::WHILE))
+  if (!skip_token (Tiger::WHILE))
     {
       skip_after_end ();
       return Tree::error ();
     }
 
   Tree expr = parse_boolean_expression ();
-  if (!skip_token (Tiny::DO))
+  if (!skip_token (Tiger::DO))
     {
       skip_after_end ();
       return Tree::error ();
@@ -1080,7 +1080,7 @@ Parser::parse_while_statement ()
 
   Tree while_body_stmt = while_body_tree_scope.bind_expr;
 
-  skip_token (Tiny::END);
+  skip_token (Tiger::END);
 
   return build_while_statement (expr, while_body_stmt);
 }
@@ -1137,20 +1137,20 @@ Parser::build_for_statement (SymbolPtr ind_var, Tree lower_bound,
 Tree
 Parser::parse_for_statement ()
 {
-  if (!skip_token (Tiny::FOR))
+  if (!skip_token (Tiger::FOR))
     {
       skip_after_end ();
       return Tree::error ();
     }
 
-  const_TokenPtr identifier = expect_token (Tiny::IDENTIFIER);
+  const_TokenPtr identifier = expect_token (Tiger::IDENTIFIER);
   if (identifier == NULL)
     {
       skip_after_end ();
       return Tree::error ();
     }
 
-  if (!skip_token (Tiny::ASSIG))
+  if (!skip_token (Tiger::ASSIG))
     {
       skip_after_end ();
       return Tree::error ();
@@ -1158,7 +1158,7 @@ Parser::parse_for_statement ()
 
   Tree lower_bound = parse_integer_expression ();
 
-  if (!skip_token (Tiny::TO))
+  if (!skip_token (Tiger::TO))
     {
       skip_after_end ();
       return Tree::error ();
@@ -1166,7 +1166,7 @@ Parser::parse_for_statement ()
 
   Tree upper_bound = parse_integer_expression ();
 
-  if (!skip_token (Tiny::DO))
+  if (!skip_token (Tiger::DO))
     {
       skip_after_end ();
       return Tree::error ();
@@ -1178,7 +1178,7 @@ Parser::parse_for_statement ()
   TreeSymbolMapping for_body_tree_scope = leave_scope ();
   Tree for_body_stmt = for_body_tree_scope.bind_expr;
 
-  skip_token (Tiny::END);
+  skip_token (Tiger::END);
 
   // Induction var
   SymbolPtr ind_var
@@ -1214,7 +1214,7 @@ Parser::get_scanf_addr ()
 Tree
 Parser::parse_read_statement ()
 {
-  if (!skip_token (Tiny::READ))
+  if (!skip_token (Tiger::READ))
     {
       skip_after_semicolon ();
       return Tree::error ();
@@ -1223,7 +1223,7 @@ Parser::parse_read_statement ()
   const_TokenPtr first_of_expr = lexer.peek_token ();
   Tree expr = parse_expression_naming_variable ();
 
-  skip_token (Tiny::SEMICOLON);
+  skip_token (Tiger::SEMICOLON);
 
   if (expr.is_error ())
     return Tree::error ();
@@ -1316,7 +1316,7 @@ Parser::parse_write_statement ()
 {
   // write_statement -> "write" expression ";"
 
-  if (!skip_token (Tiny::WRITE))
+  if (!skip_token (Tiger::WRITE))
     {
       skip_after_semicolon ();
       return Tree::error ();
@@ -1325,7 +1325,7 @@ Parser::parse_write_statement ()
   const_TokenPtr first_of_expr = lexer.peek_token ();
   Tree expr = parse_expression ();
 
-  skip_token (Tiny::SEMICOLON);
+  skip_token (Tiger::SEMICOLON);
 
   if (expr.is_error ())
     return Tree::error ();
@@ -1453,42 +1453,42 @@ Parser::left_binding_power (const_TokenPtr token)
 {
   switch (token->get_id ())
     {
-    case Tiny::DOT:
+    case Tiger::DOT:
       return LBP_DOT;
     //
-    case Tiny::LEFT_SQUARE:
+    case Tiger::LEFT_SQUARE:
       return LBP_ARRAY_REF;
     //
-    case Tiny::ASTERISK:
+    case Tiger::ASTERISK:
       return LBP_MUL;
-    case Tiny::SLASH:
+    case Tiger::SLASH:
       return LBP_DIV;
-    case Tiny::PERCENT:
+    case Tiger::PERCENT:
       return LBP_MOD;
     //
-    case Tiny::PLUS:
+    case Tiger::PLUS:
       return LBP_PLUS;
-    case Tiny::MINUS:
+    case Tiger::MINUS:
       return LBP_MINUS;
     //
-    case Tiny::EQUAL:
+    case Tiger::EQUAL:
       return LBP_EQUAL;
-    case Tiny::DIFFERENT:
+    case Tiger::DIFFERENT:
       return LBP_DIFFERENT;
-    case Tiny::GREATER:
+    case Tiger::GREATER:
       return LBP_GREATER_THAN;
-    case Tiny::GREATER_OR_EQUAL:
+    case Tiger::GREATER_OR_EQUAL:
       return LBP_GREATER_EQUAL;
-    case Tiny::LOWER:
+    case Tiger::LOWER:
       return LBP_LOWER_THAN;
-    case Tiny::LOWER_OR_EQUAL:
+    case Tiger::LOWER_OR_EQUAL:
       return LBP_LOWER_EQUAL;
     //
-    case Tiny::OR:
+    case Tiger::OR:
       return LBP_LOGICAL_OR;
-    case Tiny::AND:
+    case Tiger::AND:
       return LBP_LOGICAL_AND;
-    case Tiny::NOT:
+    case Tiger::NOT:
       return LBP_LOGICAL_NOT;
     // Anything that cannot appear after a left operand
     // is considered a terminator
@@ -1504,20 +1504,20 @@ Parser::null_denotation (const_TokenPtr tok)
 {
   switch (tok->get_id ())
     {
-    case Tiny::IDENTIFIER:
+    case Tiger::IDENTIFIER:
       {
 	SymbolPtr s = query_variable (tok->get_str (), tok->get_locus ());
 	if (s == NULL)
 	  return Tree::error ();
 	return Tree (s->get_tree_decl (), tok->get_locus ());
       }
-    case Tiny::INTEGER_LITERAL:
+    case Tiger::INTEGER_LITERAL:
       // FIXME : check ranges
       return Tree (build_int_cst_type (integer_type_node,
 				       atoi (tok->get_str ().c_str ())),
 		   tok->get_locus ());
       break;
-    case Tiny::REAL_LITERAL:
+    case Tiger::REAL_LITERAL:
       {
 	REAL_VALUE_TYPE real_value;
 	real_from_string3 (&real_value, tok->get_str ().c_str (),
@@ -1527,7 +1527,7 @@ Parser::null_denotation (const_TokenPtr tok)
 		     tok->get_locus ());
       }
       break;
-    case Tiny::STRING_LITERAL:
+    case Tiger::STRING_LITERAL:
       {
 	std::string str = tok->get_str ();
 	const char *c_str = str.c_str ();
@@ -1535,30 +1535,30 @@ Parser::null_denotation (const_TokenPtr tok)
 		     tok->get_locus ());
       }
       break;
-    case Tiny::TRUE_LITERAL :
+    case Tiger::TRUE_LITERAL :
       {
 	return Tree (build_int_cst_type (boolean_type_node, 1),
 		     tok->get_locus ());
       }
       break;
-    case Tiny::FALSE_LITERAL :
+    case Tiger::FALSE_LITERAL :
       {
 	return Tree (build_int_cst_type (boolean_type_node, 0),
 		     tok->get_locus ());
       }
       break;
-    case Tiny::LEFT_PAREN:
+    case Tiger::LEFT_PAREN:
       {
 	Tree expr = parse_expression ();
 	tok = lexer.peek_token ();
-	if (tok->get_id () != Tiny::RIGHT_PAREN)
+	if (tok->get_id () != Tiger::RIGHT_PAREN)
 	  error_at (tok->get_locus (), "expecting ) but %s found\n",
 		    tok->get_token_description ());
 	else
 	  lexer.skip_token ();
 	return Tree (expr, tok->get_locus ());
       }
-    case Tiny::PLUS:
+    case Tiger::PLUS:
       {
 	Tree expr = parse_expression (LBP_UNARY_PLUS);
 	if (expr.is_error ())
@@ -1573,7 +1573,7 @@ Parser::null_denotation (const_TokenPtr tok)
 	  }
 	return Tree (expr, tok->get_locus ());
       }
-    case Tiny::MINUS:
+    case Tiger::MINUS:
       {
 	Tree expr = parse_expression (LBP_UNARY_MINUS);
 	if (expr.is_error ())
@@ -1593,7 +1593,7 @@ Parser::null_denotation (const_TokenPtr tok)
 	  = build_tree (NEGATE_EXPR, tok->get_locus (), expr.get_type (), expr);
 	return expr;
       }
-    case Tiny::NOT:
+    case Tiger::NOT:
       {
 	Tree expr = parse_expression (LBP_LOGICAL_NOT);
 	if (expr.is_error ())
@@ -1664,7 +1664,7 @@ Parser::get_binary_handler (TokenId id)
   switch (id)
     {
 #define BINARY_HANDLER(name, token_id)                                         \
-  case Tiny::token_id:                                                         \
+  case Tiger::token_id:                                                         \
     return &Parser::binary_##name;
       BINARY_HANDLER_LIST
 #undef BINARY_HANDLER
@@ -1906,7 +1906,7 @@ Parser::binary_array_ref (const const_TokenPtr tok, Tree left)
   if (right.is_error ())
     return Tree::error ();
 
-  if (!skip_token (Tiny::RIGHT_SQUARE))
+  if (!skip_token (Tiger::RIGHT_SQUARE))
     return Tree::error ();
 
   if (!is_array_type (left.get_type ()))
@@ -1923,7 +1923,7 @@ Parser::binary_array_ref (const const_TokenPtr tok, Tree left)
 Tree
 Parser::binary_field_ref (const const_TokenPtr tok, Tree left)
 {
-  const_TokenPtr identifier = expect_token (Tiny::IDENTIFIER);
+  const_TokenPtr identifier = expect_token (Tiger::IDENTIFIER);
   if (identifier == NULL)
     {
       return Tree::error ();
@@ -2043,19 +2043,19 @@ Parser::parse_lhs_assignment_expression ()
 // ------------------------------------------------------
 // ------------------------------------------------------
 
-static void tiny_parse_file (const char *filename);
+static void tiger_parse_file (const char *filename);
 
 void
-tiny_parse_files (int num_files, const char **files)
+tiger_parse_files (int num_files, const char **files)
 {
   for (int i = 0; i < num_files; i++)
     {
-      tiny_parse_file (files[i]);
+      tiger_parse_file (files[i]);
     }
 }
 
 static void
-tiny_parse_file (const char *filename)
+tiger_parse_file (const char *filename)
 {
   // FIXME: handle stdin "-"
   FILE *file = fopen (filename, "r");
@@ -2064,8 +2064,8 @@ tiny_parse_file (const char *filename)
       fatal_error (UNKNOWN_LOCATION, "cannot open filename %s: %m", filename);
     }
 
-  Tiny::Lexer lexer (filename, file);
-  Tiny::Parser parser (lexer);
+  Tiger::Lexer lexer (filename, file);
+  Tiger::Parser parser (lexer);
 
   parser.parse_program ();
 

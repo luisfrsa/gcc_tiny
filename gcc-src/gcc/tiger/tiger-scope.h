@@ -1,11 +1,11 @@
-#ifndef TINY_SCOPE_H
-#define TINY_SCOPE_H
+#ifndef TIGER_SCOPE_H
+#define TIGER_SCOPE_H
 
-#include "tiny-symbol-mapping.h"
+#include "tiger-symbol-mapping.h"
 #include <tr1/memory>
 #include <vector>
 
-namespace Tiny
+namespace Tiger
 {
 
 struct Scope
@@ -32,4 +32,4 @@ private:
 
 }
 
-#endif // TINY_SCOPE_H
+#endif // TIGER_SCOPE_H

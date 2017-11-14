@@ -1,4 +1,4 @@
-# Top level configure fragment for tiny
+# Top level configure fragment for tiger
 #   Copyright (C) 2016 Free Software Foundation, Inc.
 
 #This file is part of GCC.
@@ -23,15 +23,15 @@
 # language	- name of language as it would appear in $(LANGUAGES)
 # compilers	- value to add to $(COMPILERS)
 
-language="tiny"
+language="tiger"
 
-compilers="tiny1\$(exeext)"
+compilers="tiger1\$(exeext)"
 
 target_libs=""
 
-gtfiles="\$(srcdir)/tiny/tiny1.cc"
+gtfiles="\$(srcdir)/tiger/tiger1.cc"
 
-# We will write the tiny FE in C++
+# We will write the tiger FE in C++
 lang_requires_boot_languages=c++
 
 # Do not build by default

@@ -1,6 +1,6 @@
-#include "tiny-token.h"
+#include "tiger-token.h"
 
-namespace Tiny
+namespace Tiger
 {
 
 const char *
@@ -8,13 +8,13 @@ get_token_description (TokenId tid)
 {
   switch (tid)
     {
-#define TINY_TOKEN(name, descr)                                                \
+#define TIGER_TOKEN(name, descr)                                                \
   case name:                                                                   \
     return descr;
-#define TINY_TOKEN_KEYWORD(x, y) TINY_TOKEN (x, y)
-      TINY_TOKEN_LIST
-#undef TINY_TOKEN_KEYWORD
-#undef TINY_TOKEN
+#define TIGER_TOKEN_KEYWORD(x, y) TIGER_TOKEN (x, y)
+      TIGER_TOKEN_LIST
+#undef TIGER_TOKEN_KEYWORD
+#undef TIGER_TOKEN
     default:
       gcc_unreachable ();
     }
@@ -25,13 +25,13 @@ token_id_to_str (TokenId tid)
 {
   switch (tid)
     {
-#define TINY_TOKEN(name, _)                                                    \
+#define TIGER_TOKEN(name, _)                                                    \
   case name:                                                                   \
     return #name;
-#define TINY_TOKEN_KEYWORD(x, y) TINY_TOKEN (x, y)
-      TINY_TOKEN_LIST
-#undef TINY_TOKEN_KEYWORD
-#undef TINY_TOKEN
+#define TIGER_TOKEN_KEYWORD(x, y) TIGER_TOKEN (x, y)
+      TIGER_TOKEN_LIST
+#undef TIGER_TOKEN_KEYWORD
+#undef TIGER_TOKEN
     default:
       gcc_unreachable ();
     }

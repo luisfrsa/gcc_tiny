@@ -1,7 +1,7 @@
-#ifndef TINY_SYMBOL_H
-#define TINY_SYMBOL_H
+#ifndef TIGER_SYMBOL_H
+#define TIGER_SYMBOL_H
 
-#include "tiny/tiny-tree.h"
+#include "tiger/tiger-tree.h"
 
 #include "config.h"
 #include "system.h"
@@ -10,7 +10,7 @@
 
 #include <tr1/memory>
 
-namespace Tiny
+namespace Tiger
 {
 
 enum /* class */ SymbolKind
@@ -65,4 +65,4 @@ typedef std::tr1::shared_ptr<const Symbol> const_SymbolPtr;
 
 }
 
-#endif // TINY_SYMBOL_H
+#endif // TIGER_SYMBOL_H
